@@ -14,6 +14,9 @@ int main() {
         XNextEvent(display, &event);
         if (event.type == KeyPress) {
             handle_keypress(&event);
+        } else if (event.type == MapNotify) {
+            move_window_to_workspace(event.xmap.window, current_workspace);
+            XMapWindow(display, event.xmap.window);
         }
     }
 
