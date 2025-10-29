@@ -30,7 +30,6 @@ void switch_to_workspace(int workspace_index) {
 // move window
 void move_window_to_workspace(Window window, int workspace_index) {
     if (workspace_index >= 0 && workspace_index < WORKSPACE_COUNT) {
-        // Удаляем окно с текущего рабочего стола
         for (int i = 0; i < window_count[current_workspace]; i++) {
             if (workspace_windows[current_workspace][i] == window) {
                 for (int j = i; j < window_count[current_workspace] - 1; j++) {
@@ -41,11 +40,9 @@ void move_window_to_workspace(Window window, int workspace_index) {
             }
         }
 
-        // Добавляем окно на новый рабочий стол
         workspace_windows[workspace_index][window_count[workspace_index]] = window;
         window_count[workspace_index]++;
 
-        // Скрываем окно, если перемещаем на неактивный рабочий стол
         if (workspace_index != current_workspace) {
             XUnmapWindow(global_display, window);
         }
