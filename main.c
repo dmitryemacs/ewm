@@ -1,5 +1,7 @@
 #include <X11/Xlib.h>
-#include "keybindings.h"
+#include "include/keybindings.h"
+#include "include/workspaces.h"
+#include "include/utils.h"
 
 int main() {
     Display *display = XOpenDisplay(NULL);
@@ -13,10 +15,9 @@ int main() {
     while (1) {
         XNextEvent(display, &event);
         if (event.type == KeyPress) {
-            handle_keypress(&event);
+            handle_keypress(&event, display);
         } else if (event.type == MapNotify) {
             move_window_to_workspace(event.xmap.window, current_workspace);
-            XMapWindow(display, event.xmap.window);
         }
     }
 
