@@ -31,23 +31,25 @@ void exit_wm(Display *display) {
 }
 
 void switch_to_workspace_1(Display *display) {
-    (void)display;
-    switch_to_workspace(0);
+    switch_to_workspace(display, 0);
 }
 
 void switch_to_workspace_2(Display *display) {
-    (void)display;
-    switch_to_workspace(1);
+    switch_to_workspace(display, 1);
 }
 
 void move_window_left(Display *display) {
     (void)display;
-    printf("Move window left\n");
+    if (current_workspace > 0) {
+        switch_to_workspace(display, current_workspace + 1);
+    }
 }
 
 void move_window_right(Display *display) {
     (void)display;
-    printf("Move window right\n");
+    if (current_workspace < WORKSPACE_COUNT - 1) {
+        switch_to_workspace(display, current_workspace + 1);
+    }
 }
 
 void init_keybindings(Display *display, Window root) {
@@ -87,7 +89,7 @@ void init_keybindings(Display *display, Window root) {
 
     bindings[8].keycode = XKeysymToKeycode(display, XK_f);
     bindings[8].modmask = Mod4Mask;
-    bindings[8].handler = toggle_fullscreen;
+    bindings[8].handler = (void (*)(Display *))toggle_fullscreen;
 
     for (int i = 0; i < 9; i++) {
         XGrabKey(display, bindings[i].keycode, bindings[i].modmask, root, True, GrabModeAsync, GrabModeAsync);
